@@ -1,0 +1,298 @@
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.Scanner;
+import java.awt.*;
+
+
+public class GUI2 
+{
+
+  static JFrame jFrame = new JFrame();
+
+  static JButton start = new JButton("Start");
+  static JButton quit = new JButton("Quit");
+  static JButton back = new JButton("Back");
+
+  static JLabel welcome = new JLabel("Welcome to Hangman!");
+  static JLabel title = new JLabel("");
+  static JLabel correct = new JLabel("Enter a word to guess");
+  static JLabel letters = new JLabel("");
+
+  
+  public static void main(String[] args) 
+  {
+    jFrame.setResizable(false);
+    jFrame.setSize(600, 900);
+    jFrame.setVisible(true);
+  
+    jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    welcome.setBounds(240, 50, 400, 50);
+    title.setBounds(200, 50, 400, 50);
+    correct.setBounds(200, 20, 400, 50);
+    start.setBounds(250, 250, 100, 100);
+    quit.setBounds(250, 450, 100, 100);
+    back.setBounds(25, 25, 100, 50);
+    letters.setBounds(200, 550, 500, 100);
+    back.setVisible(false);
+    correct.setVisible(false);
+    letters.setVisible(false);
+    welcome.setVisible(true);
+
+    jFrame.add(title);
+    jFrame.add(start);
+    jFrame.add(quit);
+    jFrame.add(back);
+    jFrame.add(correct);
+    jFrame.add(letters);
+    jFrame.add(welcome);
+    //quit button
+    quit.addActionListener(new ActionListener() 
+    {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+        System.exit(0);
+      }
+    });
+    //start button
+    start.addActionListener(new ActionListener() 
+    {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+        Font myFont = new Font("Plain", Font.BOLD, 45);
+        letters.setFont(myFont);
+        back.setVisible(true);
+        start.setVisible(false);
+        quit.setVisible(false);
+        correct.setVisible(true);
+        letters.setVisible(true);
+        welcome.setVisible(false);
+        title.setText("You have 6 attempts to guess the word");
+        jFrame.getContentPane().add(new gallow());
+      }
+    });
+    //back button
+    back.addActionListener(new ActionListener() 
+    {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+        back.setVisible(false);
+        start.setVisible(true);
+        quit.setVisible(true);
+        correct.setVisible(false);
+        letters.setVisible(false);
+        title.setText("Welcome to Hangman!");
+        jFrame.getContentPane().add(new blank());
+      }
+    });
+
+    Scanner sc = new Scanner(System.in);
+    String answer = sc.nextLine();
+    String[] ans = new String[answer.length()];
+    String[] blanks = new String[answer.length()];
+    int cor = 0;
+    int inc = 0;
+    //converting answer to string array
+    for (int i = 0; i<answer.length(); i++)
+      {
+        ans[i] = answer.substring(i,i+1);
+      }
+    //creating the blank string array
+    for (int i=0 ; i<answer.length(); i++)
+      {
+        blanks[i] = "_";
+      }
+    //checking that the guess matches the answer
+    for (int i=0; i<6; i++)
+      {
+        String guess = sc.nextLine();
+        boolean matches = false;
+        for (int j = 0; j<answer.length(); j++)
+          {
+            if (ans[j].equals(guess))
+              {
+                cor++;
+                matches = true;
+                blanks[j] = guess;
+                correct.setText("Correct guess!");
+                letters.setText("");
+                for (int k=0; k<blanks.length;k++)
+                  {
+                   String text = letters.getText() + blanks[k];       
+                   letters.setText(text);
+                  }
+              }
+            else if (j==answer.length()-1 && matches==false)
+            {
+                correct.setText("Incorrect.");
+                inc++;
+            }
+          }
+        title.setText("You have " + (5-i) + " guesses left");
+        System.out.println(inc);
+        //title implementation
+        if (i==5)
+        {
+            correct.setText("Last guess!");
+        }
+        if (i==6)
+        {
+            correct.setText("Game Over");
+            title.setText("The answer was " + answer);
+            break;
+        }
+        if (cor==answer.length())
+        {
+            correct.setText("Congratulations you have solved the puzzle");
+            title.setText("");
+            break;
+        }
+        //graphics implementation
+        if (inc == 1)
+        {
+            jFrame.getContentPane().add(new head());
+        }
+        if (inc == 2)
+        {
+            jFrame.getContentPane().add(new body());
+        }
+        if (inc == 3)
+        {
+            jFrame.getContentPane().add(new arm1());
+        }
+        if (inc == 4)
+        {
+            jFrame.getContentPane().add(new arm2());
+        }
+        if (inc == 5)
+        {
+            jFrame.getContentPane().add(new leg1());
+        }
+        if (inc == 6)
+        {
+            jFrame.getContentPane().add(new leg2());
+        }
+        
+    }
+  sc.close();
+  }  
+
+}
+//graphics
+
+class gallow extends JComponent 
+    {
+        public void paint(Graphics g)
+        {
+          
+        // draw and display the line
+        g.drawLine(200, 150, 200, 520);
+        g.drawLine(100,520,300,520);
+        g.drawLine(200,150,300,150);
+        g.drawLine(300,150,300,200);
+        }
+    }
+    
+class head extends JComponent 
+    {
+        public void paint(Graphics g)
+        {
+          
+        // draw and display the line
+        g.drawLine(200, 150, 200, 520);
+        g.drawLine(100,520,300,520);
+        g.drawLine(200,150,300,150);
+        g.drawLine(300,150,300,200);
+        g.drawOval(270,200,60,60);
+        }
+    }
+class body extends JComponent 
+    {
+        public void paint(Graphics g)
+        {
+          
+        // draw and display the line
+        g.drawLine(200, 150, 200, 520);
+        g.drawLine(100,520,300,520);
+        g.drawLine(200,150,300,150);
+        g.drawLine(300,150,300,200);
+        g.drawOval(270,200,60,60);
+        g.drawLine(300,260,300,360);
+        }
+    }
+class arm1 extends JComponent 
+    {
+        public void paint(Graphics g)
+        {
+          
+        // draw and display the line
+        g.drawLine(200, 150, 200, 520);
+        g.drawLine(100,520,300,520);
+        g.drawLine(200,150,300,150);
+        g.drawLine(300,150,300,200);
+        g.drawOval(270,200,60,60);
+        g.drawLine(300,260,300,360);
+        g.drawLine(300,310,270,280);
+        }
+    }
+class arm2 extends JComponent 
+    {
+        public void paint(Graphics g)
+        {
+          
+        // draw and display the line
+        g.drawLine(200, 150, 200, 520);
+        g.drawLine(100,520,300,520);
+        g.drawLine(200,150,300,150);
+        g.drawLine(300,150,300,200);
+        g.drawOval(270,200,60,60);
+        g.drawLine(300,260,300,360);
+        g.drawLine(300,310,270,280);
+        g.drawLine(300,310,330,280);
+        }
+    }
+class leg1 extends JComponent 
+    {
+        public void paint(Graphics g)
+        {
+          
+        // draw and display the line
+        g.drawLine(200, 150, 200, 520);
+        g.drawLine(100,520,300,520);
+        g.drawLine(200,150,300,150);
+        g.drawLine(300,150,300,200);
+        g.drawOval(270,200,60,60);
+        g.drawLine(300,260,300,360);
+        g.drawLine(300,310,270,280);
+        g.drawLine(300,310,330,280);
+        g.drawLine(300,360,270,390);
+        }
+    }
+class leg2 extends JComponent 
+    {
+        public void paint(Graphics g)
+        {
+          
+        // draw and display the line
+        g.drawLine(200, 150, 200, 520);
+        g.drawLine(100,520,300,520);
+        g.drawLine(200,150,300,150);
+        g.drawLine(300,150,300,200);
+        g.drawOval(270,200,60,60);
+        g.drawLine(300,260,300,360);
+        g.drawLine(300,310,270,280);
+        g.drawLine(300,310,330,280);
+        g.drawLine(300,360,270,390);
+        g.drawLine(300,360,330,390);
+        }
+    }
+class blank extends JComponent 
+    {
+        public void paint(Graphics g)
+        {
+            g.drawLine(0,0,0,0);
+        }
+    }
+
