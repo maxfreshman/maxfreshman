@@ -2,9 +2,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.Scanner;
 import java.awt.*;
+import java.awt.Color;
 
-
-public class GUI2 
+public class Hangman
 {
 
   static JFrame jFrame = new JFrame();
@@ -12,9 +12,10 @@ public class GUI2
   static JButton start = new JButton("Start");
   static JButton quit = new JButton("Quit");
   static JButton back = new JButton("Back");
+  static JButton replay = new JButton("Play Again");
 
   static JLabel title = new JLabel("");
-  static JLabel welcome = new JLabel("Welcome to Hangman!");
+  static JLabel welcome = new JLabel("WELCOME TO HANGMAN!");
   static JLabel correct = new JLabel("Enter a word to guess");
   static JLabel letters = new JLabel("");
 
@@ -22,18 +23,33 @@ public class GUI2
   public static void main(String[] args) 
   {
     jFrame.setResizable(false);
-    jFrame.setSize(600, 900);
     jFrame.setVisible(true);
-  
+    jFrame.setSize(600, 900);
     jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+    Color bkgColor = new Color(255,255,153);
+    jFrame.getContentPane().setBackground(bkgColor);
+    
     title.setBounds(200, 50, 400, 50);
     correct.setBounds(200, 20, 400, 50);
     start.setBounds(250, 250, 100, 100);
     quit.setBounds(250, 450, 100, 100);
     back.setBounds(25, 25, 100, 50);
-    letters.setBounds(200, 550, 500, 100);
-    welcome.setBounds(250,50,400,400);
+    replay.setBounds(400,760,100,50);
+    letters.setBounds(190, 550, 500, 100);
+    welcome.setBounds(190,50,300,100);
+    
+    //setting fonts for titles
+    Font myFont = new Font("Comic Sans MS", Font.BOLD, 45);
+    letters.setFont(myFont);
+    Font myFont2 = new Font("Comic Sans MS", Font.BOLD, 20);
+    welcome.setFont(myFont2);
+    Font myFont3 = new Font("Comic Sans MS", Font.BOLD, 14);
+    title.setFont(myFont3);
+    correct.setFont(myFont3);
+    
     back.setVisible(false);
+    replay.setVisible(false);
     correct.setVisible(false);
     letters.setVisible(false);
     welcome.setVisible(true);
@@ -45,8 +61,18 @@ public class GUI2
     jFrame.add(correct);
     jFrame.add(letters);
     jFrame.add(welcome);
+    jFrame.add(replay);
     //quit button
     quit.addActionListener(new ActionListener() 
+    {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+        System.exit(0);
+      }
+    });
+    //play again button
+    replay.addActionListener(new ActionListener() 
     {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -60,14 +86,13 @@ public class GUI2
       @Override
       public void actionPerformed(ActionEvent e) 
       {
-        Font myFont = new Font("Plain", Font.BOLD, 45);
-        letters.setFont(myFont);
         back.setVisible(true);
         start.setVisible(false);
         quit.setVisible(false);
         correct.setVisible(true);
         letters.setVisible(true);
         welcome.setVisible(false);
+        replay.setVisible(true);
         title.setText("You have 6 attempts to guess the word");
         jFrame.getContentPane().add(new gallow());
       }
@@ -88,23 +113,24 @@ public class GUI2
       }
     });
 
+    int cor = 0;
+    int inc = 0;
+    //scanning for answer
     Scanner sc = new Scanner(System.in);
     String answer = sc.nextLine();
     String[] ans = new String[answer.length()];
     String[] blanks = new String[answer.length()];
-    int cor = 0;
-    int inc = 0;
     //converting answer to string array
     for (int i = 0; i<answer.length(); i++)
       {
         ans[i] = answer.substring(i,i+1);
       }
-    //creating the blank string array
+    //creating blank string array for guesses
     for (int i=0 ; i<answer.length(); i++)
       {
         blanks[i] = "_";
       }
-    //checking that the guess matches the answer
+    //checking if guess matches answer
     for (int i=0; i<6; i++)
       {
         String guess = sc.nextLine();
@@ -147,7 +173,6 @@ public class GUI2
             title.setText("");
             break;
         }
-        
         //graphics implementation
         if (inc == 1)
         {
